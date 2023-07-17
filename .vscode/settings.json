@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "chrono": "cpp",
+        "ratio": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "cstdint": "cpp",
+        "ctime": "cpp",
+        "type_traits": "cpp",
+        "limits": "cpp",
+        "*.tcc": "cpp",
+        "cwchar": "cpp",
+        "string": "cpp",
+        "new": "cpp",
+        "stdexcept": "cpp",
+        "system_error": "cpp"
+    }
+}
