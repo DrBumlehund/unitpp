@@ -10,10 +10,15 @@ find_package(Catch2 CONFIG REQUIRED)
 
 
 set(SOURCES
-    "include/unitpp/internal/mass.h"
     "include/unitpp/internal/unit.h"
+    "include/unitpp/internal/mass.h"
+    "include/unitpp/internal/length.h"
+
     "include/unitpp/units/imperial/mass.h"
+    "include/unitpp/units/imperial/length.h"
+    
     "include/unitpp/units/si/mass.h"
+    "include/unitpp/units/si/length.h"
 )
 
 set(TEST_SOURCES
@@ -29,3 +34,7 @@ target_link_libraries(unitpp-test PRIVATE unitpp Catch2::Catch2 Catch2::Catch2Wi
 
 add_executable(mass-example "examples/mass_example.cpp")
 target_link_libraries(mass-example PRIVATE unitpp)
+
+
+add_executable(length-example "examples/length_example.cpp")
+target_link_libraries(length-example PRIVATE unitpp)
