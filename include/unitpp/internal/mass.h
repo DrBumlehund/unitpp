@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <ratio>
 
-#include "unitpp/unit.h"
+#include "unitpp/internal/unit.h"
 
 namespace unitpp {
 
@@ -25,21 +25,5 @@ constexpr __enable_if_is_mass<to_mass_> mass_cast(
     const mass<rep_, period_>& m_) {
   return unit_cast<to_mass_>(m_);
 }
-
-namespace si {
-using picograms = mass<int64_t, std::pico>;
-using nanograms = mass<int64_t, std::nano>;
-using micrograms = mass<int64_t, std::micro>;
-using milligrams = mass<int64_t, std::milli>;
-using grams = mass<int64_t>;
-using hectograms = mass<int64_t, std::hecto>;
-using kilograms = mass<int64_t, std::kilo>;
-using megagrams = mass<int64_t, std::mega>;
-using tonnes = megagrams;
-}  // namespace si
-
-namespace imperial {
-using pounds = mass<double, std::ratio<45359237, 100000>>;
-}  // namespace imperial
 
 }  // namespace unitpp
