@@ -41,8 +41,8 @@ catch_discover_tests(unitpp-test)
 
 add_executable(mass-example "examples/mass_example.cpp")
 target_link_libraries(mass-example PRIVATE unitpp)
-add_test(NAME "mass example" COMMAND mass-example)
+add_test(NAME mass_example COMMAND mass-example)
 
 add_executable(length-example "examples/length_example.cpp")
 target_link_libraries(length-example PRIVATE unitpp)
-add_test(NAME "length example" COMMAND length-example)
+add_test(NAME length_example COMMAND length-example)
