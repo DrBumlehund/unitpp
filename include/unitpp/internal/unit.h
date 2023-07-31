@@ -35,25 +35,23 @@ namespace std {
 
 /// Specialization of common_type for unitpp::unit types.
 template <typename rep1_, typename period1_, typename rep2_, typename period2_>
-struct common_type<unitpp::unit<rep1_, period1_>,
-                   unitpp::unit<rep2_, period2_>>
+struct common_type<unitpp::unit<rep1_, period1_>, unitpp::unit<rep2_, period2_>>
     : __unit_wrapper_common_type<common_type<rep1_, rep2_>,
                                  typename period1_::type,
                                  typename period2_::type> {};
 
 /// Specialization of common_type for two identical unitpp::unit types.
 template <typename rep_, typename period_>
-struct common_type<unitpp::unit<rep_, period_>,
-                   unitpp::unit<rep_, period_>> {
-  using type = unitpp::unit<typename common_type<rep_>::type,
-                                    typename period_::type>;
+struct common_type<unitpp::unit<rep_, period_>, unitpp::unit<rep_, period_>> {
+  using type =
+      unitpp::unit<typename common_type<rep_>::type, typename period_::type>;
 };
 
 /// Specialization of common_type for one unitpp::unit type.
 template <typename rep_, typename period_>
 struct common_type<unitpp::unit<rep_, period_>> {
-  using type = unitpp::unit<typename common_type<rep_>::type,
-                                    typename period_::type>;
+  using type =
+      unitpp::unit<typename common_type<rep_>::type, typename period_::type>;
 };
 
 }  // namespace std
@@ -67,8 +65,8 @@ struct __unit_cast_impl {
   static constexpr to_unit_ __cast(const unit<rep_, period_>& __d) {
     typedef typename to_unit_::rep __to_rep;
     return to_unit_(static_cast<__to_rep>(static_cast<_CR>(__d.count()) *
-                                        static_cast<_CR>(_CF::num) /
-                                        static_cast<_CR>(_CF::den)));
+                                          static_cast<_CR>(_CF::num) /
+                                          static_cast<_CR>(_CF::den)));
   }
 };
 
@@ -87,7 +85,7 @@ struct __unit_cast_impl<to_unit_, _CF, _CR, true, false> {
   static constexpr to_unit_ __cast(const unit<rep_, period_>& __d) {
     typedef typename to_unit_::rep __to_rep;
     return to_unit_(static_cast<__to_rep>(static_cast<_CR>(__d.count()) /
-                                        static_cast<_CR>(_CF::den)));
+                                          static_cast<_CR>(_CF::den)));
   }
 };
 
@@ -97,7 +95,7 @@ struct __unit_cast_impl<to_unit_, _CF, _CR, false, true> {
   static constexpr to_unit_ __cast(const unit<rep_, period_>& __d) {
     typedef typename to_unit_::rep __to_rep;
     return to_unit_(static_cast<__to_rep>(static_cast<_CR>(__d.count()) *
-                                        static_cast<_CR>(_CF::num)));
+                                          static_cast<_CR>(_CF::num)));
   }
 };
 
@@ -190,8 +188,7 @@ struct unit {
             typename = std::_Require<
                 std::is_convertible<const rep2_&, rep>,
                 std::__or_<__is_float<rep>, std::__not_<__is_float<rep2_>>>>>
-  constexpr explicit unit(const rep2_& __rep)
-      : r_(static_cast<rep>(__rep)) {}
+  constexpr explicit unit(const rep2_& __rep) : r_(static_cast<rep>(__rep)) {}
 
   template <typename rep2_, typename period2_,
             typename = std::_Require<
@@ -207,13 +204,13 @@ struct unit {
 
   constexpr rep count() const { return r_; }
 
-  constexpr unit<typename std::common_type<rep>::type, period>
-  operator+() const {
+  constexpr unit<typename std::common_type<rep>::type, period> operator+()
+      const {
     return unit<typename std::common_type<rep>::type, period>(r_);
   }
 
-  constexpr unit<typename std::common_type<rep>::type, period>
-  operator-() const {
+  constexpr unit<typename std::common_type<rep>::type, period> operator-()
+      const {
     return unit<typename std::common_type<rep>::type, period>(-r_);
   }
 
@@ -255,16 +252,49 @@ struct unit {
     return unit(unit_values<rep>::zero());
   }
 
-  static constexpr unit min() noexcept {
-    return unit(unit_values<rep>::min());
-  }
+  static constexpr unit min() noexcept { return unit(unit_values<rep>::min()); }
 
-  static constexpr unit max() noexcept {
-    return unit(unit_values<rep>::max());
-  }
+  static constexpr unit max() noexcept { return unit(unit_values<rep>::max()); }
 
  private:
   rep r_;
 };
+
+#define UNITPP_BASIC_MEM_FUNCS(unit_name)                         \
+  using unit_t = unitpp::unit<rep_, period_>;                     \
+  template <typename rep2_, typename period2_>                    \
+  constexpr unit_name(const unitpp::unit<rep2_, period2_>& u_)    \
+      : unitpp::unit<rep_, period_>::unit(u_) {}                  \
+                                                                  \
+  template <typename rep2_, typename period2_>                    \
+  unit_name& operator=(const unitpp::unit<rep2_, period2_>& u_) { \
+    unitpp::unit<rep_, period_>::operator=(u_);                   \
+    return *this;                                                 \
+  }                                                               \
+  using unitpp::unit<rep_, period_>::unit;                        \
+  using unitpp::unit<rep_, period_>::operator=;                   \
+  using unitpp::unit<rep_, period_>::operator++;                  \
+  using unitpp::unit<rep_, period_>::operator--;                  \
+  using unitpp::unit<rep_, period_>::operator+=;                  \
+  using unitpp::unit<rep_, period_>::operator-=;                  \
+  using unitpp::unit<rep_, period_>::operator*=;                  \
+  using unitpp::unit<rep_, period_>::operator/=;
+
+#define UNITPP_BASIC_FUNCS(unit_name)                                    \
+  template <typename tp_>                                                \
+  struct __is_##unit_name : std::false_type {};                          \
+                                                                         \
+  template <typename rep_, typename period_>                             \
+  struct __is_##unit_name<unit_name<rep_, period_>> : std::true_type {}; \
+                                                                         \
+  template <typename _Tp>                                                \
+  using __enable_if_is_##unit_name =                                     \
+      typename std::enable_if<__is_##unit_name<_Tp>::value, _Tp>::type;  \
+                                                                         \
+  template <typename to_unit_, typename rep_, typename period_>          \
+  constexpr __enable_if_is_##unit_name<to_unit_> cast_##unit_name(       \
+      const unit_name<rep_, period_>& m_) {                              \
+    return unit_cast<typename to_unit_::unit_t>(m_);                     \
+  }
 
 }  // namespace unitpp
