@@ -11,10 +11,10 @@ int main() {
 
   std::cout << "i have " << distance_km.count() << " km to work\n";
 
-  auto distance_m = length_cast<si::metres>(distance_km);
+  auto distance_m = cast_length<si::metres>(distance_km);
   std::cout << "which is " << distance_m.count() << " m\n";
 
-  auto distance_mi = length_cast<imperial::miles>(distance_km);
+  auto distance_mi = cast_length<imperial::miles>(distance_km);
   std::cout << "or " << distance_mi.count() << " mi\n";
   return 0;
 }

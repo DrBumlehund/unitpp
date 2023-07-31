@@ -8,6 +8,8 @@ pmm(VCPKG REVISION 2023.04.15 REQUIRES catch2)
 
 find_package(Catch2 CONFIG REQUIRED)
 
+include(CTest)
+include(Catch)
 
 set(SOURCES
     "include/unitpp/internal/unit.h"
@@ -19,9 +21,13 @@ set(SOURCES
     
     "include/unitpp/units/si/mass.h"
     "include/unitpp/units/si/length.h"
+    "include/unitpp/units/length.h"
+    "include/unitpp/units/mass.h"
+    "include/unitpp/units.h"
 )
 
 set(TEST_SOURCES
+    "test/length_casting.cpp"
     "test/mass_casting.cpp"
 )
 
@@ -31,6 +37,7 @@ set_target_properties(unitpp PROPERTIES LINKER_LANGUAGE CXX)
 
 add_executable(unitpp-test ${TEST_SOURCES})
 target_link_libraries(unitpp-test PRIVATE unitpp Catch2::Catch2 Catch2::Catch2WithMain)
+catch_discover_tests(unitpp-test)
 
 add_executable(mass-example "examples/mass_example.cpp")
 target_link_libraries(mass-example PRIVATE unitpp)
