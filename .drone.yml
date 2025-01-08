@@ -1,0 +1,11 @@
+kind: pipeline
+name: default
+
+steps:
+- name: test
+  image: rikorose/gcc-cmake
+  commands:
+  - mkdir -p build
+  - cd build; cmake ..
+  - cmake --build -C build
+  - ctest -C build
