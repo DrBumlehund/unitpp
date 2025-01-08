@@ -5,7 +5,7 @@ steps:
 - name: test
   image: rikorose/gcc-cmake
   commands:
-  - apt-get install curl zip unzip tar
+  - apt-get update; apt-get install curl zip unzip tar
   - mkdir -p build
   - cd build; cmake ..
   - cmake --build -C build
