@@ -8,5 +8,5 @@ steps:
   - apt-get update; apt-get -y install curl zip unzip tar
   - mkdir -p build
   - cd build; cmake ..
-  - cmake -B build -DCMAKE_BUILD_TYPE=Release
+  - cd build; cmake --build -DCMAKE_BUILD_TYPE=Release ..
   - cd build; ctest
